@@ -1,14 +1,14 @@
 {
   "files": {
-    "main.css": "/amer-zakaria.github.io/fake-store-app/static/css/main.28db0f17.css",
-    "main.js": "/amer-zakaria.github.io/fake-store-app/static/js/main.f820d603.js",
-    "static/media/sprite.svg": "/amer-zakaria.github.io/fake-store-app/static/media/sprite.24999a67de70d2202ccca39f57df85f6.svg",
-    "index.html": "/amer-zakaria.github.io/fake-store-app/index.html",
-    "main.28db0f17.css.map": "/amer-zakaria.github.io/fake-store-app/static/css/main.28db0f17.css.map",
-    "main.f820d603.js.map": "/amer-zakaria.github.io/fake-store-app/static/js/main.f820d603.js.map"
+    "main.css": "/fake-store-app/static/css/main.28db0f17.css",
+    "main.js": "/fake-store-app/static/js/main.fd80b35f.js",
+    "static/media/sprite.svg": "/fake-store-app/static/media/sprite.24999a67de70d2202ccca39f57df85f6.svg",
+    "index.html": "/fake-store-app/index.html",
+    "main.28db0f17.css.map": "/fake-store-app/static/css/main.28db0f17.css.map",
+    "main.fd80b35f.js.map": "/fake-store-app/static/js/main.fd80b35f.js.map"
   },
   "entrypoints": [
     "static/css/main.28db0f17.css",
-    "static/js/main.f820d603.js"
+    "static/js/main.fd80b35f.js"
   ]
 }
