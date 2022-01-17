@@ -2,8 +2,6 @@ import { makeStyles } from "@mui/styles";
 
 export default makeStyles({
   icon: {
-    cursor: "pointer",
-    boxSizing: "content-box",
     color: "#222",
   },
   iconContainer: {

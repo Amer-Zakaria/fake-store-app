@@ -55,12 +55,7 @@ const Product = () => {
 
   const classes = useStyles(product.isImageLoadded);
   return (
-    <Card
-      component={motion.div}
-      variants={animations}
-      whileHover="cardHover"
-      className={classes.card}
-    >
+    <Card component={motion.div} variants={animations} whileHover="cardHover">
       <div className={classes.cardMediaContainer}>
         <CardMedia
           ref={img}
@@ -68,7 +63,6 @@ const Product = () => {
           component="img"
           image={product.image}
           alt={product.category}
-          className={classes.cardMedia}
         />
         <Box className={classes.cardLoader}>
           <CircularProgress color="secondary" />
@@ -81,7 +75,7 @@ const Product = () => {
         onAdd={handleAdd}
         isAdded={product.isAdded}
       />
-      <CardContent className={classes.cardContent}>
+      <CardContent>
         <Typography variant="body" color="text.primary">
           {product.title}
         </Typography>
@@ -103,7 +97,7 @@ const Product = () => {
           className={classes.cardRating}
         />
       </CardContent>
-      <CardActions className={classes.cardAction}>
+      <CardActions>
         <Typography
           className={classes.cardMore}
           variant="body2"

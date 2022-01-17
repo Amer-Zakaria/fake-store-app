@@ -6,37 +6,27 @@ import { SvgIcon, Divider, createSvgIcon, IconButton } from "@mui/material";
 import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 
-const CartAddIcon = createSvgIcon(
-  <use href={sprite + "#cart-plus"}></use>,
-  "cart Add"
-);
-
-const CartCheckIcon = createSvgIcon(
-  <use href={sprite + "#cart-check"}></use>,
-  "cart check"
-);
-
 const TwoActionIcons = (props) => {
   const classes = useStyles();
   const { onAdd, isAdded, isFavorite, onFavorite } = props;
   return (
     <div className={classes.iconContainer}>
-      <IconButton>
+      <IconButton onClick={() => onFavorite(isFavorite)}>
         <SvgIcon
-          className={classes.icon}
-          onClick={() => onFavorite(isFavorite)}
-          component={isFavorite ? FavoriteIcon : FavoriteBorderOutlinedIcon}
           fontSize="large"
+          className={classes.icon}
+          component={isFavorite ? FavoriteIcon : FavoriteBorderOutlinedIcon}
         />
       </IconButton>
       <Divider variant="middle" orientation="vertical" flexItem />
-      <IconButton>
-        <SvgIcon
-          className={classes.icon}
-          fontSize="large"
-          onClick={() => onAdd(isAdded)}
-          component={isAdded ? CartCheckIcon : CartAddIcon}
-        />
+      <IconButton onClick={() => onAdd(isAdded)}>
+        <SvgIcon fontSize="large" className={classes.icon}>
+          {isAdded ? (
+            <use href={sprite + "#cart-check"}></use>
+          ) : (
+            <use href={sprite + "#cart-plus"}></use>
+          )}
+        </SvgIcon>
       </IconButton>
     </div>
   );
