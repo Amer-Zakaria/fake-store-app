@@ -7,10 +7,6 @@ export default makeStyles({
     alignItems: "center",
     position: "relative",
   },
-  cardLoader: (isImageLoadded) => ({
-    display: isImageLoadded ? "none" : "block",
-    position: "absolute",
-  }),
   cardPrice: {
     marginTop: "5px !important",
   },
@@ -24,8 +20,10 @@ export default makeStyles({
 });
 
 export const animations = {
-  cardHover: {
-    boxShadow: "0px 0px 15px 5px rgba(196,196,196, 0.5)",
+  card: {
+    hover: { boxShadow: "0px 0px 15px 5px rgba(196,196,196, 0.5)" },
   },
-  cardMoreHover: { scale: 1.1 },
+  cardMore: {
+    hover: { scale: 1.1 },
+  },
 };

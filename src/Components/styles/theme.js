@@ -4,12 +4,25 @@ const customTheme = createTheme({
   typography: {
     fontFamily: "'Lato', Arial, sans-serif",
   },
+  palette: {
+    primary: {
+      main: "#9c27b0",
+    },
+  },
+  breakpoints: {
+    values: {
+      xs: 0,
+      sm: 510,
+      md: 690,
+      lg: 1200,
+      xl: 1536,
+    },
+  },
   components: {
     MuiCard: {
       styleOverrides: {
         root: {
-          width: 200,
-          margin: "20px auto",
+          margin: "20px 15px",
           padding: "20px 10px 10px",
           borderRadius: "20px",
           position: "relative",
@@ -19,8 +32,7 @@ const customTheme = createTheme({
     MuiCardMedia: {
       styleOverrides: {
         root: {
-          opacity: 0,
-          transition: "all 0.5s",
+          transition: "all 0.3s",
         },
       },
     },

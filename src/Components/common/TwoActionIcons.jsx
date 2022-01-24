@@ -1,17 +1,24 @@
 import React from "react";
 import sprite from "../../icons/sprite.svg";
 import useStyles from "../styles/TwoActionIcons.js";
+import { ACTION } from "../../Providers/ProductsProvider";
 
-import { SvgIcon, Divider, createSvgIcon, IconButton } from "@mui/material";
+import { SvgIcon, Divider, IconButton } from "@mui/material";
 import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 
-const TwoActionIcons = (props) => {
+const TwoActionIcons = ({
+  updateProducts,
+  product: { id, isFavorite, isAdded },
+}) => {
   const classes = useStyles();
-  const { onAdd, isAdded, isFavorite, onFavorite } = props;
   return (
     <div className={classes.iconContainer}>
-      <IconButton onClick={() => onFavorite(isFavorite)}>
+      <IconButton
+        onClick={() =>
+          updateProducts({ type: ACTION.FAVORITE, payload: { id } })
+        }
+      >
         <SvgIcon
           fontSize="large"
           className={classes.icon}
@@ -19,7 +26,9 @@ const TwoActionIcons = (props) => {
         />
       </IconButton>
       <Divider variant="middle" orientation="vertical" flexItem />
-      <IconButton onClick={() => onAdd(isAdded)}>
+      <IconButton
+        onClick={() => updateProducts({ type: ACTION.ADD, payload: { id } })}
+      >
         <SvgIcon fontSize="large" className={classes.icon}>
           {isAdded ? (
             <use href={sprite + "#cart-check"}></use>
