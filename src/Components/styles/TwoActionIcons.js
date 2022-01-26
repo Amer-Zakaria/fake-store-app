@@ -4,7 +4,10 @@ export default makeStyles({
   icon: {
     color: "#222",
   },
-  iconContainer: {
+  iconButton: {
+    padding: 8,
+  },
+  iconsContainer: {
     position: "absolute",
     top: 0,
     right: 0,

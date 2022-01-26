@@ -1,7 +1,11 @@
-import { createStyles, makeStyles } from "@mui/styles";
+import { makeStyles } from "@mui/styles";
 
 export default makeStyles({
-  masonry: {},
+  masonry: {
+    listStyle: "none",
+    padding: "0 40px",
+    margin: "0 auto",
+  },
   "@media (min-width: 740px)": {
     masonry: {
       maxWidth: 840,

@@ -1,8 +1,9 @@
 import React, { useContext } from "react";
 import { ProductsContext } from "./../Providers/ProductsProvider";
-import Product from "./common/Product";
-import useStyles, { animations } from "./styles/products";
 import sprite from "../icons/sprite.svg";
+import useStyles, { animations } from "./styles/products";
+
+import Product from "./common/Product";
 
 import { Masonry } from "@mui/lab";
 import { motion } from "framer-motion";
@@ -22,7 +23,6 @@ const Products = () => {
           initial="hidden"
           animate="visible"
           className={classes.masonry}
-          style={{ listStyle: "none", padding: "0 40px", margin: "0 auto" }}
         >
           {products.map((product) => (
             <motion.li key={product.id} variants={animations.product}>

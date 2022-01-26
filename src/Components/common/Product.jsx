@@ -1,9 +1,10 @@
 import React, { useRef } from "react";
-import TwoActionIcons from "./TwoActionIcons";
 import useStyles, { animations } from "../styles/product";
 import imageError from "../../images/image-error.png";
-
 import { motion } from "framer-motion";
+
+import TwoActionIcons from "./TwoActionIcons";
+
 import {
   Rating,
   Card,
@@ -23,6 +24,7 @@ const Product = ({ product, updateProducts }) => {
         variants={animations.card}
         whileHover={"hover"}
         component={motion.div}
+        className={classes.card}
       >
         <div className={classes.cardMediaContainer}>
           <CardMedia
@@ -34,7 +36,7 @@ const Product = ({ product, updateProducts }) => {
           />
         </div>
         <TwoActionIcons product={product} updateProducts={updateProducts} />
-        <CardContent>
+        <CardContent className={classes.cardContent}>
           <Typography variant="body" color="text.primary">
             {product.title}
           </Typography>
@@ -56,7 +58,7 @@ const Product = ({ product, updateProducts }) => {
             className={classes.cardRating}
           />
         </CardContent>
-        <CardActions>
+        <CardActions className={classes.cardAction}>
           <Typography
             className={classes.cardMore}
             variant="body2"

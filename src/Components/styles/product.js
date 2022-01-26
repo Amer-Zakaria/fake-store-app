@@ -1,17 +1,32 @@
 import { makeStyles } from "@mui/styles";
 
 export default makeStyles({
+  card: {
+    margin: "20px 15px",
+    padding: "20px 10px 10px",
+    borderRadius: "20px",
+    position: "relative",
+  },
   cardMediaContainer: {
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
     position: "relative",
   },
+  cardContent: {
+    padding: "0",
+    margin: "5px 0px",
+    overflowWrap: "break-word;",
+  },
   cardPrice: {
-    marginTop: "5px !important",
+    marginTop: "5px",
   },
   cardRating: {
     marginTop: "2px",
+  },
+  cardAction: {
+    display: "block",
+    padding: "0",
   },
   cardMore: {
     textAlign: "center",

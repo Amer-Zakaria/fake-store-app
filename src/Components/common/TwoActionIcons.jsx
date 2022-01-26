@@ -13,11 +13,13 @@ const TwoActionIcons = ({
 }) => {
   const classes = useStyles();
   return (
-    <div className={classes.iconContainer}>
+    <div className={classes.iconsContainer}>
       <IconButton
         onClick={() =>
           updateProducts({ type: ACTION.FAVORITE, payload: { id } })
         }
+        size="large"
+        className={classes.iconButton}
       >
         <SvgIcon
           fontSize="large"
@@ -28,6 +30,8 @@ const TwoActionIcons = ({
       <Divider variant="middle" orientation="vertical" flexItem />
       <IconButton
         onClick={() => updateProducts({ type: ACTION.ADD, payload: { id } })}
+        size="large"
+        className={classes.iconButton}
       >
         <SvgIcon fontSize="large" className={classes.icon}>
           {isAdded ? (
