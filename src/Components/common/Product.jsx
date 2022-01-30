@@ -14,7 +14,7 @@ import {
   Typography,
 } from "@mui/material";
 
-const Product = ({ product, updateProducts }) => {
+const Product = ({ product }) => {
   const img = useRef(null);
   const classes = useStyles();
 
@@ -35,7 +35,7 @@ const Product = ({ product, updateProducts }) => {
             loading="lazy"
           />
         </div>
-        <TwoActionIcons product={product} updateProducts={updateProducts} />
+        <TwoActionIcons product={product} />
         <CardContent className={classes.cardContent}>
           <Typography variant="body" color="text.primary">
             {product.title}

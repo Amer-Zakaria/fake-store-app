@@ -1,7 +1,9 @@
-import React, { useContext } from "react";
-import { ProductsContext } from "./../Providers/ProductsProvider";
+import React, { useEffect } from "react";
 import sprite from "../icons/sprite.svg";
 import useStyles, { animations } from "./styles/products";
+import { getProducts, getImage } from "../Services/productsService";
+import { toast } from "react-toastify";
+import { useProductsStore } from "./../store";
 
 import Product from "./common/Product";
 
@@ -11,7 +13,42 @@ import { CircularProgress } from "@mui/material";
 
 const Products = () => {
   const classes = useStyles();
-  const { products, updateProducts } = useContext(ProductsContext);
+  const products = useProductsStore((state) => state.products);
+  const updateProducts = useProductsStore((state) => state.updateProducts);
+
+  async function fetchProducts() {
+    const products = await getProducts().catch((error) => {
+      if (!error.isExpectedError) {
+        toast.error("An UnExpected Error Occurred!");
+      } else {
+        toast.error(`Error: ${error.message}`);
+      }
+      updateProducts("error");
+    });
+
+    if (Array.isArray(products)) {
+      for (let product of products) {
+        product.isAdded = false;
+        product.isFavorite = false;
+      }
+      //fetching images manually
+      Promise.all(
+        products
+          .map((product) => getImage(product.image.slice(24)))
+          .map((imagePromise) => imagePromise.catch((e) => "error"))
+      ).then((blobImages) => {
+        for (let index in products) {
+          if (blobImages[index] === "error") products[index].image = "error";
+          else products[index].image = URL.createObjectURL(blobImages[index]);
+        }
+        updateProducts(products);
+      });
+    }
+  }
+
+  useEffect(() => {
+    fetchProducts();
+  }, []);
 
   return (
     <>
@@ -26,10 +63,7 @@ const Products = () => {
         >
           {products.map((product) => (
             <motion.li key={product.id} variants={animations.product}>
-              <Product
-                product={product}
-                updateProducts={updateProducts}
-              ></Product>
+              <Product product={product}></Product>
             </motion.li>
           ))}
         </Masonry>
