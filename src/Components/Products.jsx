@@ -4,6 +4,7 @@ import useStyles, { animations } from "./styles/products";
 import { getProducts, getImage } from "../Services/productsService";
 import { toast } from "react-toastify";
 import { useProductsStore } from "./../store";
+import { useTheme } from "@mui/styles";
 
 import Product from "./common/Product";
 
@@ -12,9 +13,10 @@ import { motion } from "framer-motion";
 import { CircularProgress } from "@mui/material";
 
 const Products = () => {
-  const classes = useStyles();
   const products = useProductsStore((state) => state.products);
   const updateProducts = useProductsStore((state) => state.updateProducts);
+  const classes = useStyles();
+  const theme = useTheme();
 
   async function fetchProducts() {
     const products = await getProducts().catch((error) => {
@@ -57,7 +59,9 @@ const Products = () => {
           columns={{ xs: 1, sm: 2, md: 3 }}
           component={motion.ul}
           variants={animations.products}
-          initial="hidden"
+          initial={
+            window.innerWidth >= theme.breakpoints.values.sm ? "hidden" : ""
+          }
           animate="visible"
           className={classes.masonry}
         >
