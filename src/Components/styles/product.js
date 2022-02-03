@@ -1,6 +1,6 @@
 import { makeStyles } from "@mui/styles";
 
-export default makeStyles({
+export default makeStyles((isImageLoadded) => ({
   card: {
     margin: "20px 15px",
     padding: "20px 10px 10px",
@@ -13,6 +13,9 @@ export default makeStyles({
     alignItems: "center",
     position: "relative",
   },
+  cardMedia: (isImageLoadded) => ({
+    minHeight: isImageLoadded ? "auto" : "300px",
+  }),
   cardContent: {
     padding: "0",
     margin: "5px 0px",
@@ -32,7 +35,7 @@ export default makeStyles({
     textAlign: "center",
     cursor: "pointer",
   },
-});
+}));
 
 export const animations = {
   card: {

@@ -39,7 +39,7 @@ export const animations = {
     hidden: {},
     visible: {
       transition: {
-        delayChildren: 0.3,
+        delayChildren: 0.5,
         staggerChildren: 0.2,
       },
     },

@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useState } from "react";
 import useStyles, { animations } from "../styles/product";
 import imageError from "../../images/image-error.png";
 import { motion } from "framer-motion";
@@ -15,8 +15,8 @@ import {
 } from "@mui/material";
 
 const Product = ({ product }) => {
-  const img = useRef(null);
-  const classes = useStyles();
+  const [isImageLoadded, setIsImageLoadded] = useState(false);
+  const classes = useStyles(isImageLoadded);
 
   return (
     <>
@@ -28,11 +28,14 @@ const Product = ({ product }) => {
       >
         <div className={classes.cardMediaContainer}>
           <CardMedia
-            ref={img}
+            className={classes.cardMedia}
             component={"img"}
             alt={product.category}
             image={product.image === "error" ? imageError : product.image}
             loading="lazy"
+            onLoad={() => {
+              setIsImageLoadded(true);
+            }}
           />
         </div>
         <TwoActionIcons product={product} />
