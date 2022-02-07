@@ -7,7 +7,7 @@ import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlin
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import { useProductsStore } from "./../../store";
 
-const TwoActionIcons = ({ product: { id, isFavorite, isCart } }) => {
+const TwoActionIcons = ({ product }) => {
   const addProductsToCart = useProductsStore((state) => state.addProductToCart);
   const addProductsToFavorite = useProductsStore(
     (state) => state.addProductToFavorite
@@ -17,24 +17,26 @@ const TwoActionIcons = ({ product: { id, isFavorite, isCart } }) => {
   return (
     <div className={classes.iconsContainer}>
       <IconButton
-        onClick={() => addProductsToFavorite(id)}
+        onClick={() => addProductsToFavorite(product)}
         size="large"
         className={classes.iconButton}
       >
         <SvgIcon
           fontSize="large"
           className={classes.icon}
-          component={isFavorite ? FavoriteIcon : FavoriteBorderOutlinedIcon}
+          component={
+            product.isFavorite ? FavoriteIcon : FavoriteBorderOutlinedIcon
+          }
         />
       </IconButton>
       <Divider variant="middle" orientation="vertical" flexItem />
       <IconButton
-        onClick={() => addProductsToCart(id)}
+        onClick={() => addProductsToCart(product)}
         size="large"
         className={classes.iconButton}
       >
         <SvgIcon fontSize="large" className={classes.icon}>
-          {isCart ? (
+          {product.isCart ? (
             <use href={sprite + "#cart-check"}></use>
           ) : (
             <use href={sprite + "#cart-plus"}></use>

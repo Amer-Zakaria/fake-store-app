@@ -1,10 +1,11 @@
 import create from "zustand";
-import { devtools } from "zustand/middleware";
+import { devtools, persist } from "zustand/middleware";
 import { toast } from "react-toastify";
 import { getProducts, getImage } from "./Services/productsService";
 
 let productsStore = (set) => ({
   products: "fetching",
+  specialProducts: [],
 
   updateProducts: async () => {
     const products = await getProducts().catch((error) => {
@@ -18,7 +19,7 @@ let productsStore = (set) => ({
 
     if (Array.isArray(products)) {
       for (let product of products) {
-        product.isAdded = false;
+        product.isCart = false;
         product.isFavorite = false;
       }
       //fetching images manually
@@ -31,56 +32,143 @@ let productsStore = (set) => ({
           if (blobImages[index] === "error") products[index].image = "error";
           else products[index].image = URL.createObjectURL(blobImages[index]);
         }
-        set({ products: products });
+        set((state) => ({
+          products: products.map((product) => {
+            const specialProduct = state.specialProducts.find(
+              (specialProduct) => specialProduct.id === product.id
+            );
+            if (specialProduct) {
+              product.isCart = specialProduct.isCart;
+              product.isFavorite = specialProduct.isFavorite;
+              return product;
+            }
+            return product;
+          }),
+        }));
       });
     }
   },
 
-  addProductToCart: (id) =>
-    set((state) => ({
-      products: state.products.map((product) => {
-        if (product.id === id) {
-          product.isCart = !product.isCart;
-          if (product.isCart) {
-            toast.success("Product added to Cart", {
-              position: "bottom-right",
-              autoClose: 3000,
-            });
-          } else {
-            toast("Product removed from Cart", {
-              position: "bottom-right",
-              autoClose: 3000,
-              hideProgressBar: true,
-            });
-          }
-          return product;
-        }
-        return product;
-      }),
-    })),
+  addProductToCart: (modifiedProduct) => {
+    modifiedProduct.isCart = !modifiedProduct.isCart;
 
-  addProductToFavorite: (id) =>
     set((state) => ({
-      products: state.products.map((product) => {
-        if (product.id === id) {
-          product.isFavorite = !product.isFavorite;
-          if (product.isFavorite) {
-            toast.success("Product added to favorites", {
-              position: "bottom-right",
-              autoClose: 3000,
-            });
-          } else {
-            toast("Product removed from favorites", {
-              position: "bottom-right",
-              autoClose: 3000,
-              hideProgressBar: true,
-            });
-          }
-          return product;
+      products: getNewProducts(state.products),
+      specialProducts: getSpecialProducts(state.specialProducts),
+    }));
+
+    function getNewProducts(products) {
+      return products.map((product) => {
+        if (product.id === modifiedProduct.id) {
+          return modifiedProduct;
         }
         return product;
-      }),
-    })),
+      });
+    }
+
+    function getSpecialProducts(specialProducts) {
+      if (modifiedProduct.isCart) {
+        toast.success("Product added to Cart", {
+          position: "bottom-right",
+          autoClose: 3000,
+        });
+      } else {
+        toast("Product removed from Cart", {
+          position: "bottom-right",
+          autoClose: 3000,
+          hideProgressBar: true,
+        });
+      }
+
+      const isModifedProductExistInSpecialProducts = specialProducts.some(
+        (specialProduct) => specialProduct.id === modifiedProduct.id
+      );
+      const newSpecialProducts = specialProducts.map((specialProduct) => {
+        if (specialProduct.id === modifiedProduct.id) {
+          return modifiedProduct;
+        }
+        return specialProduct;
+      });
+      //if the modified product in special products
+      if (isModifedProductExistInSpecialProducts) {
+        if (
+          modifiedProduct.isCart === false &&
+          modifiedProduct.isFavorite === false
+        ) {
+          return newSpecialProducts.filter(
+            (specialProduct) => specialProduct.id !== modifiedProduct.id
+          );
+        }
+        return newSpecialProducts;
+      }
+      //if the modified product not exist in special products
+      newSpecialProducts.push(modifiedProduct);
+      return newSpecialProducts;
+    }
+  },
+
+  addProductToFavorite: (modifiedProduct) => {
+    modifiedProduct.isFavorite = !modifiedProduct.isFavorite;
+
+    set((state) => ({
+      products: getNewProducts(state.products),
+      specialProducts: getSpecialProducts(state.specialProducts),
+    }));
+
+    function getNewProducts(products) {
+      return products.map((product) => {
+        if (product.id === modifiedProduct.id) {
+          return modifiedProduct;
+        }
+        return product;
+      });
+    }
+
+    function getSpecialProducts(specialProducts) {
+      if (modifiedProduct.isFavorite) {
+        toast.success("Product added to Favorite", {
+          position: "bottom-right",
+          autoClose: 3000,
+        });
+      } else {
+        toast("Product removed from Favorite", {
+          position: "bottom-right",
+          autoClose: 3000,
+          hideProgressBar: true,
+        });
+      }
+
+      const isModifedProductExistInSpecialProducts = specialProducts.some(
+        (specialProduct) => specialProduct.id === modifiedProduct.id
+      );
+      const newSpecialProducts = specialProducts.map((specialProduct) => {
+        if (specialProduct.id === modifiedProduct.id) {
+          return modifiedProduct;
+        }
+        return specialProduct;
+      });
+      //if the modified product in special products
+      if (isModifedProductExistInSpecialProducts) {
+        if (
+          modifiedProduct.isCart === false &&
+          modifiedProduct.isFavorite === false
+        ) {
+          return newSpecialProducts.filter(
+            (specialProduct) => specialProduct.id !== modifiedProduct.id
+          );
+        }
+        return newSpecialProducts;
+      }
+      //if the modified product not exist in special products
+      newSpecialProducts.push(modifiedProduct);
+      return newSpecialProducts;
+    }
+  },
+});
+//save special products in local storage
+productsStore = persist(productsStore, {
+  name: "special-products",
+  partialize: (state) => ({ specialProducts: state.specialProducts }),
 });
 
 productsStore = devtools(productsStore);
