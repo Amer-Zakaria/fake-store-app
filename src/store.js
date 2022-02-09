@@ -7,7 +7,7 @@ let productsStore = (set) => ({
   products: "fetching",
   specialProducts: [],
 
-  updateProducts: async () => {
+  updateProducts: async (productsPerPage) => {
     const products = await getProducts().catch((error) => {
       if (!error.isExpectedError) {
         toast.error("An UnExpected Error Occurred!");
@@ -25,10 +25,11 @@ let productsStore = (set) => ({
       //fetching images manually
       Promise.all(
         products
+          .slice(0, productsPerPage)
           .map((product) => getImage(product.image.slice(24)))
           .map((imagePromise) => imagePromise.catch((e) => "error"))
       ).then((blobImages) => {
-        for (let index in products) {
+        for (let index in products.slice(0, productsPerPage)) {
           if (blobImages[index] === "error") products[index].image = "error";
           else products[index].image = URL.createObjectURL(blobImages[index]);
         }

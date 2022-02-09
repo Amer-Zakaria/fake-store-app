@@ -21,6 +21,11 @@ export default makeStyles({
       maxWidth: 350,
     },
   },
+  pagination: {
+    width: "fit-content",
+    margin: "0 auto",
+    paddingBottom: 25,
+  },
   notFetchedContainer: {
     display: "flex",
     justifyContent: "center",
@@ -39,15 +44,15 @@ export const animations = {
     hidden: {},
     visible: {
       transition: {
-        delayChildren: 0.5,
+        delayChildren: 0.3,
         staggerChildren: 0.2,
       },
     },
   },
   product: {
-    hidden: { scale: 0.8, opacity: 0 },
+    hidden: { y: 20, opacity: 0 },
     visible: {
-      scale: 1,
+      y: 0,
       opacity: 1,
     },
   },
