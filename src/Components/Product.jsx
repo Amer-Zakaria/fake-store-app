@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import useStyles, { animations } from "../styles/product";
-import imageError from "../../images/image-error.png";
+import useStyles, { animations } from "./styles/product";
+import imageError from "../images/image-error.png";
 import { motion } from "framer-motion";
 
 import TwoActionIcons from "./TwoActionIcons";

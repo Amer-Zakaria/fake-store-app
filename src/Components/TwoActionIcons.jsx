@@ -1,11 +1,11 @@
 import React from "react";
-import sprite from "../../icons/sprite.svg";
-import useStyles from "../styles/TwoActionIcons.js";
+import sprite from "../icons/sprite.svg";
+import useStyles from "./styles/TwoActionIcons.js";
 
 import { SvgIcon, Divider, IconButton } from "@mui/material";
 import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
 import FavoriteIcon from "@mui/icons-material/Favorite";
-import { useProductsStore } from "./../../store";
+import { useProductsStore } from "../store";
 
 const TwoActionIcons = ({ product }) => {
   const addProductsToCart = useProductsStore((state) => state.addProductToCart);
