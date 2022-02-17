@@ -5,6 +5,7 @@ import { useProductsStore } from "../store";
 import getPaginatedProducts from "../Utils/getPaginatedProducts";
 
 import ProductsMasonry from "./ProductsMasonry";
+import Finder from "./Finder";
 
 import { CircularProgress, Pagination } from "@mui/material";
 
@@ -37,6 +38,7 @@ const Products = () => {
     <>
       {Array.isArray(products) ? (
         <>
+          <Finder />
           <ProductsMasonry products={paginatedProducts} />
           <Pagination
             count={pages}
