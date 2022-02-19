@@ -165,7 +165,64 @@ let productsStore = (set) => ({
       return newSpecialProducts;
     }
   },
+
+  /* Sort */
+  sortPriceAsc: () => {
+    set((state) => {
+      let newProducts = [...state.products];
+      newProducts = newProducts.sort(
+        (firstProduct, secondProduct) =>
+          firstProduct.price - secondProduct.price
+      );
+      return {
+        products: newProducts,
+      };
+    });
+  },
+
+  sortPriceDesc: () => {
+    set((state) => {
+      let newProducts = [...state.products];
+      newProducts = newProducts.sort(
+        (firstProduct, secondProduct) =>
+          secondProduct.price - firstProduct.price
+      );
+      return {
+        products: newProducts,
+      };
+    });
+  },
+
+  sortBestRate: () => {
+    set((state) => {
+      let newProducts = [...state.products];
+      newProducts = newProducts.sort(
+        (firstProduct, secondProduct) =>
+          secondProduct.rating.rate - firstProduct.rating.rate
+      );
+      return {
+        products: newProducts,
+      };
+    });
+  },
+
+  sortA_Z: () => {
+    set((state) => {
+      let newProducts = [...state.products];
+      newProducts = newProducts.sort((firstProduct, secondProduct) => {
+        return firstProduct.title[0].toLowerCase() >
+          secondProduct.title[0].toLowerCase()
+          ? 1
+          : -1;
+      });
+
+      return {
+        products: newProducts,
+      };
+    });
+  },
 });
+
 //save special products in local storage
 productsStore = persist(productsStore, {
   name: "special-products",
