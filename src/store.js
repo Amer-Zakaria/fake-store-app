@@ -2,10 +2,14 @@ import create from "zustand";
 import { devtools, persist } from "zustand/middleware";
 import { toast } from "react-toastify";
 import { getProducts, getImage } from "./Services/productsService";
+import { filtersConstructor } from "./Utils/filtersConstructor";
 
-let productsStore = (set) => ({
+let productsStore = (set, get) => ({
   products: "fetching",
   specialProducts: [],
+  filters: [],
+  page: 1,
+  filterDrawer: { isOpened: false, width: "270px" },
 
   updateProducts: async (productsPerPage) => {
     const products = await getProducts().catch((error) => {
@@ -45,6 +49,7 @@ let productsStore = (set) => ({
             }
             return product;
           }),
+          filters: filtersConstructor(products),
         }));
       });
     }
@@ -221,6 +226,117 @@ let productsStore = (set) => ({
       };
     });
   },
+
+  /* Filters */
+  getFilteredProducts: () => {
+    let productsFiltered = get().products;
+    const filters = get().filters;
+
+    if (Array.isArray(productsFiltered)) {
+      //Price
+      productsFiltered = productsFiltered.filter(
+        (product) =>
+          product.price >= filters.price.priceFilter[0] &&
+          product.price <= filters.price.priceFilter[1]
+      );
+      //Categorie
+      const selectedCategories = filters.categories
+        .filter((categorie) => categorie.checked)
+        .map((categorie) => categorie.displayName);
+      if (selectedCategories.length > 0) {
+        productsFiltered = productsFiltered.filter((product) =>
+          selectedCategories.some(
+            (slectedCategorie) => slectedCategorie === product.category
+          )
+        );
+      }
+      //Special Products
+      const selectedSpecialProducts = filters.specialProducts.filter(
+        (specialProducts) => specialProducts.checked
+      ); //selected checkboxes
+      if (selectedSpecialProducts.length > 0) {
+        productsFiltered = productsFiltered.filter((product) => {
+          const productIsSpecialProduct = selectedSpecialProducts.some(
+            (selectedSpecialProduct) =>
+              selectedSpecialProduct.checked ===
+              product[selectedSpecialProduct.booleanKey]
+          );
+          return productIsSpecialProduct;
+        });
+      }
+      //Rate
+      const selectedRates = filters.rates
+        .filter((rate) => rate.checked)
+        .map((rate) => rate.rateNumber);
+      if (selectedRates.length > 0) {
+        productsFiltered = productsFiltered.filter((product) =>
+          selectedRates.some(
+            (selectedRate) => selectedRate === Math.round(product.rating.rate)
+          )
+        );
+      }
+      //filter by name
+      const filterByName = filters.filterByName;
+      if (filterByName.length > 0) {
+        productsFiltered = productsFiltered.filter(
+          (product) =>
+            product.title.slice(0, filterByName.trim().length).toLowerCase() ===
+            filterByName.toLowerCase().trim()
+        );
+      }
+    }
+
+    return productsFiltered;
+  },
+
+  updatePriceFilter: (newPrice) => {
+    set((state) => {
+      const newFilters = { ...state.filters };
+      newFilters.price.priceFilter = newPrice;
+      return { filters: newFilters };
+    });
+  },
+
+  updateCheckboxGroup: (groupName, checkboxName, makeAllFalse) =>
+    set((state) => {
+      const newFilters = { ...state.filters };
+      newFilters[groupName] = newFilters[groupName].map((checkbox) => {
+        if (makeAllFalse) {
+          checkbox.checked = false;
+          return checkbox;
+        }
+        if (checkbox.displayName === checkboxName) {
+          checkbox.checked = !checkbox.checked;
+          return checkbox;
+        }
+        return checkbox;
+      });
+      return { filters: newFilters };
+    }),
+
+  updateFilterDrawerStatus: (status) => {
+    set((state) => ({ filterDrawer: { width: "270px", isOpened: status } }));
+  },
+
+  resetPriceFilter: () => {
+    set((state) => {
+      const newFilters = { ...state.filters };
+      const defaultPrices = newFilters.price.defaultPrices;
+      newFilters.price.priceFilter = defaultPrices;
+      return { filters: newFilters };
+    });
+  },
+
+  updateFilterByName: (filterByName) => {
+    set((state) => {
+      const newFilters = { ...state.filters };
+      newFilters.filterByName = filterByName;
+      return { filters: newFilters };
+    });
+  },
+
+  /* page */
+  updatePage: (page) => set(() => ({ page })),
 });
 
 //save special products in local storage

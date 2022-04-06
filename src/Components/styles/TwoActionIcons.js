@@ -1,8 +1,9 @@
 import { makeStyles } from "@mui/styles";
+import { grey } from "@mui/material/colors";
 
 export default makeStyles({
   icon: {
-    color: "#222",
+    color: grey[800],
   },
   iconButton: {
     padding: 8,

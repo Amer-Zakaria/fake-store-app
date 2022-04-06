@@ -53,8 +53,6 @@ const Product = ({ product }) => {
             {product.price}$
           </Typography>
           <Rating
-            name="half-rating-read"
-            precision={0.5}
             value={product.rating.rate}
             readOnly
             size="small"

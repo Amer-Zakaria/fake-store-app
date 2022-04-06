@@ -1,34 +1,47 @@
-import React, { useState, useEffect, useLayoutEffect } from "react";
+import React, { useEffect, useLayoutEffect } from "react";
 import sprite from "../icons/sprite.svg";
 import useStyles from "./styles/products";
 import { useProductsStore } from "../store";
 import getPaginatedProducts from "../Utils/getPaginatedProducts";
+import fixPaginationIssue from "../Utils/fixPaginationIssue";
 
 import ProductsMasonry from "./ProductsMasonry";
 import Finder from "./Finder";
+import { FilterDrawer } from "./Filter";
 
-import { CircularProgress, Pagination } from "@mui/material";
+import { CircularProgress, Drawer, Pagination } from "@mui/material";
 
 const Products = () => {
-  const products = useProductsStore((state) => state.products);
+  const products = useProductsStore((state) => state.getFilteredProducts)();
+  //listener to update products
+  const listenToChangesOfProducts = useProductsStore((state) => state.products);
+  const listenToChangesOfFilters = useProductsStore((state) => state.filters);
   const updateProducts = useProductsStore((state) => state.updateProducts);
   const classes = useStyles();
+  const filterDrawerWidth = useProductsStore(
+    (state) => state.filterDrawer
+  ).width;
 
   //pagination
-  const [page, setPage] = useState(1);
-  const productsPerPage = 8;
+  const page = useProductsStore((state) => state.page);
+  const updatePage = useProductsStore((state) => state.updatePage);
+  const productsPerPage = 6;
   const pages = Math.ceil(products.length / productsPerPage);
   const paginatedProducts = getPaginatedProducts(
     products,
     page,
     productsPerPage
   );
-  const handlePageChange = (event, page) => {
-    setPage(page);
-  };
+  function handlePageChange(e, currentPage) {
+    updatePage(currentPage);
+    fixPaginationIssue(currentPage);
+  }
   useLayoutEffect(() => {
     window.scrollTo(0, 0);
   }, [page]);
+  useLayoutEffect(() => {
+    handlePageChange(null, 1);
+  }, [listenToChangesOfFilters]);
 
   useEffect(() => {
     updateProducts(productsPerPage);
@@ -37,18 +50,25 @@ const Products = () => {
   return (
     <>
       {Array.isArray(products) ? (
-        <>
-          <Finder />
-          <ProductsMasonry products={paginatedProducts} />
-          <Pagination
-            count={pages}
-            color="primary"
-            hidePrevButton={true}
-            hideNextButton={true}
-            className={classes.pagination}
-            onChange={handlePageChange}
-          />
-        </>
+        <div style={{ display: "flex" }}>
+          <FilterDrawer />
+          <div className={classes.rightSide}>
+            <Finder />
+            <ProductsMasonry products={paginatedProducts} />
+            {pages > 1 ? (
+              <Pagination
+                count={pages}
+                color="primary"
+                hidePrevButton={true}
+                hideNextButton={true}
+                className={classes.pagination}
+                onChange={handlePageChange}
+              />
+            ) : (
+              ""
+            )}
+          </div>
+        </div>
       ) : (
         <div className={classes.notFetchedContainer}>
           {products === "fetching" ? (

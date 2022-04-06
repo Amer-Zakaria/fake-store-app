@@ -13,7 +13,7 @@ const ProductsMasonry = ({ products }) => {
 
   return (
     <Masonry
-      columns={{ xs: 1, sm: 2, md: 3 }}
+      columns={{ xs: 1, sm: 2, lg: 3 }}
       component={motion.ul}
       variants={animations.products}
       initial={window.innerWidth >= theme.breakpoints.values.sm ? "hidden" : ""}

@@ -6,19 +6,20 @@ export default makeStyles({
     padding: "0 40px",
     margin: "0 auto",
   },
-  "@media (min-width: 740px)": {
+  rightSide: { width: "100%", margin: "0 auto" },
+  "@media (min-width: 1001px)": {
     masonry: {
       maxWidth: 840,
     },
   },
-  "@media (max-width: 690px)": {
+  "@media (max-width: 1000px)": {
     masonry: {
       maxWidth: 620,
     },
   },
   "@media (max-width: 510px)": {
     masonry: {
-      maxWidth: 350,
+      maxWidth: 320,
     },
   },
   pagination: {

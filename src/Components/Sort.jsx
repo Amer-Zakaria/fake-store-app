@@ -1,16 +1,19 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import useStyles from "./styles/finderMethods";
+import { useTheme } from "@mui/styles";
+import { grey } from "@mui/material/colors";
 
 import {
-  IconButton,
   Menu,
   MenuItem,
   ListItemText,
   ListItemIcon,
+  Button,
 } from "@mui/material";
 import SortIcon from "@mui/icons-material/Sort";
 import CheckIcon from "@mui/icons-material/Check";
 import { useProductsStore } from "./../store";
+import fixPaginationIssue from "./../Utils/fixPaginationIssue";
 
 const Sort = () => {
   const classes = useStyles();
@@ -20,6 +23,7 @@ const Sort = () => {
   const sortProductDesc = useProductsStore((state) => state.sortPriceDesc);
   const sortBestRate = useProductsStore((state) => state.sortBestRate);
   const sortA_Z = useProductsStore((state) => state.sortA_Z);
+  const updatePage = useProductsStore((state) => state.updatePage);
   const sortMethodsArray = [
     {
       name: "Price (low to high)",
@@ -51,6 +55,7 @@ const Sort = () => {
     },
   ];
   const [sortMethods, setSortMethods] = useState(sortMethodsArray);
+  const theme = useTheme();
 
   const handleClose = () => {
     setAnchorEl(null);
@@ -59,6 +64,11 @@ const Sort = () => {
   const handleOpen = (event) => {
     setAnchorEl(event.currentTarget);
   };
+  const [isSortActive, setIsSortActive] = useState(false);
+
+  useEffect(() => {
+    setIsSortActive(sortMethods.some((sortMethod) => sortMethod.isActive));
+  }, [sortMethods]);
 
   function handleChoose(name, sortProductsHandler) {
     setAnchorEl(null);
@@ -78,10 +88,14 @@ const Sort = () => {
 
   return (
     <>
-      <IconButton onClick={handleOpen} className={classes.methodButton}>
+      <Button
+        sx={{ color: isSortActive ? theme.palette.primary.main : grey[700] }}
+        onClick={handleOpen}
+        className={classes.methodButton}
+      >
         <SortIcon className={classes.sortIcon} />
         Sort
-      </IconButton>
+      </Button>
       <Menu
         anchorEl={anchorEl}
         open={open}
@@ -98,7 +112,11 @@ const Sort = () => {
         {sortMethods.map((sortMethod) => (
           <MenuItem
             sx={{ padding: "6px 10px" }}
-            onClick={() => sortMethod.clickHandler(sortMethod.name)}
+            onClick={() => {
+              sortMethod.clickHandler(sortMethod.name);
+              fixPaginationIssue(1);
+              updatePage(1);
+            }}
             key={sortMethod.name}
           >
             {sortMethod.isActive ? (
